@@ -34,8 +34,9 @@ def text_analysis(clean_text):
 	for character in clean_text:
 		letter = clean_text[index]
 		code = ord(letter) #Convert to ASCII code
+		
 #..................................................................................
-		if state == 0:
+		if state == 0: #START
 			
 			if code == 34: #The character is a " and change a STATE 1 (String)
 				state = 1
@@ -96,26 +97,26 @@ def text_analysis(clean_text):
 		index += 1
 
 #Method to count each type of variable
-def count_types(result_list):
+def count_types(result_list, value):
 	count = 0
 	integer = 0
-	greater = 0
-	smaller = 0
 	double = 0
+	smaller = 0
+	greater = 0
 
 	for row in result_list:
 		if result_list[count][0] == 12:     # Are reals?
 			double += 1
 		elif result_list[count][0] == 11:   # Are Integers?
 			integer += 1
-			if result_list[count][1] > 100: # Higher than 100?
+			if int(result_list[count][1]) > value: # 
 				greater += 1
 			else:
-				smaller += 1 
-
+				smaller += 1
 		count += 1
 
-	print "\nEnteros: ", integer, "\nReales: ", double, "\nMayores a 100: ", greater, "\nMenores iguales a 100: ", smaller
+	print "\nEnteros: ", integer, "\nReales: ", double, "\nMayores a ", value, ":", greater, "\nMenores o iguales a ", value, ": ", smaller, "\n"
+	smaller = greater = 0
 
 
 # Call the method to know what type of variable is
@@ -127,7 +128,7 @@ for row in tokens:
 	print row
 
 # Count how many are higher than 100 and how many are less equal to 100, also count integers and real numbers
-count_types(tokens)
+count_types(tokens, 100)
 
 # Close file 
 fichero.close()
