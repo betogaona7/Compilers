@@ -9,6 +9,7 @@ import sys
 fichero = open("file7", "r")
 
 import sys
+print '\n'
 
 def isInteger(string):
 	try:
@@ -27,7 +28,6 @@ def isFloat(string):
 
 tokens = []
 variables_table = []
-errors = []
 
 index = 0
 line = 1
@@ -54,7 +54,7 @@ def analysis(character):
 	global variable
 	global aux_line
 
-	global declared
+	global declared 
 	
 #                    "     .   0-9 space OC
 	states = [[0,    0,    0,   0,   0,    0], 
@@ -179,7 +179,7 @@ def analysis(character):
 					break
 				cont += 1
 
-			if (is_reserved_word == True):
+			if (is_reserved_word == True): #Esto significa que es una palabra reservada
 				if(typee == 6 or typee == 7 or typee == 17 or typee == 19):
 					if(typee == 6):
 						type_var = 8
@@ -210,53 +210,58 @@ def analysis(character):
 
 					for var in variables_table:
 						
-						temp = str(var).split(' ')
-						
-						if(temp[2] == variable):
+						if(var[1] == variable):
 							flag = True
-							token = [temp[0], line, direction, variable] #CHANGE
+							token = [var[0], line, direction, variable] #CHANGE							
 							tokens.append(token)
 
-							dim_array = int(temp[4])
-							left = int(temp[6])
-							right = int(temp[8])
+							dim_array = int(var[2])
+							left = int(var[3])
+							right = int(var[4])
 
 							try:
 								if(dim_array != 0):
 									if(aux_line[aux_index] == ' '):
 										if(aux_line[aux_index + 1] != '('):
-											print "Error en la linea ", line
+											print "Error en la linea ", line, " la variable no esta siendo considerada como un arreglo"
 											#sys.exit(0)
 										else:
-											content = aux_line[(aux_index + 1):(aux_line.index(')', aux_index) - aux_index - 1)]
+											content = aux_line[(aux_index + 1):(aux_index + 1 + (aux_line.index(')', aux_index) - aux_index - 1))]
 											if(dim_array == 1):
+
 												if(int(content) > left):
-													print "Error en la linea ", line
+													print "Error en la linea ", line, " la variable ", variable, " tiene limites fuera de lo establecido"
 													#sys.exit(0)
 											else:
 												dimensions_content = str(content).split(',')
+
+												print "dimensions_content: ", dimensions_content
+												#sys.exit(0)
+
 												if(int(dimensions_content[0]) > left) or (int(dimensions_content[1]) > right):
-													print "Error en la linea ", line
+													print "Error en la linea ", line, " la variable ", variable, " tiene limites fuera del establecido "
 													#sys.exit(0)
 									else:
 										if(aux_line[aux_index] != '('):
-											print "Error en la linea ", line
+											print "Error en la linea ", line, " la variable no esta siendo considerada como un arreglo"
 											#sys.exit(0)
 										else:
-											content = aux_line[(aux_index + 1):(aux_line.index(')', aux_index) - aux_index - 1)]
+											content = aux_line[(aux_index + 1):(aux_index + 1 + (aux_line.index(')', aux_index) - aux_index - 1))]
+											
 											if(dim_array == 1):
 												if(int(content) > left):
-													print "Error en la linea ", line
+													print "Error en la linea ", line, " variable ", variable , " fuera de los limites al establecer el arreglo"
 													#sys.exit(0)
 											else:
 												dimensions_content = str(content).split(',')
 												if (int(dimensions_content[0]) > left or int(dimensions_content[1]) > right):
-													print "Error en la linea ", line
+													print "Error en la linea ", line, " variable ", variable, " fuera de los limites al establecer el arreglo"
 													#sys.exit(0)
 
 							    #break
 	   						except ValueError:
-	   							break
+	   							None
+	   						break
 						direction += 1
 
 					if(flag == False):
@@ -270,7 +275,8 @@ def analysis(character):
 							right = 0
 						
 						elif (character == '('):
-							data = aux_line[(index + 1):(aux_line.index(')', index) - index - 1)]
+							data = aux_line[(index + 1):(index + 1 + (aux_line.index(')', index) - index - 1))]
+
 							temp = []
 							is_array = True
 
@@ -292,7 +298,7 @@ def analysis(character):
 						variables_table.append(var)
 
 						if(declared == False):
-							print "Error en la linea ", line
+							print "Error en la linea ", line , " la variable ", variable , " no ha sido declarada"
 							#sys.exit(0)
 							#errors.append("Error la variable no ha sido declarada")
 					flag = False 
@@ -358,9 +364,11 @@ for text_line in fichero:
 	line += 1
 	index = 0
 
+print '\n'
 
 for token in tokens:
-	print token
+	if (token[3] != ' ' and token[3] != '\n'):
+		print token 
 
 print '\n'
 
