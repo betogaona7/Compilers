@@ -1,0 +1,5 @@
+BEGIN
+    NUM i, j, k
+MAIN
+    i = j*k/2
+END
