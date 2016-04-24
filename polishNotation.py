@@ -1,12 +1,12 @@
 import string 
 
-precedencia={'=':20, "OR":30, "AND":40, "NOT":50, '<':60, '>':60, '+':70,'-':70,'*':80,'/':80,'^':90}
+precedencia={'=':20,'<':60, '>':60, '+':70,'-':70,'*':80,'/':80,'^':90}
 asociativo={'+':'i','-':'i','*':'i','/':'i','^':'d'}
 operador='=<>+-*/^'
 papertura='([{'
 pcierre=')]}'
 sep=',;'
-func=['sqrt','log','ln','sin','cos','tg','cotg']
+func=['OR','AND','NOT']
 expresion_infixa=''
 stack=[]
 cola_salida=[]
@@ -85,6 +85,7 @@ print expresion_infixa
 
 #buscamos los tokens que hay en infixa, y los metemos en una lista
 lista=infixa_a_tokens()
+print lista
 
 for i in range(len(lista)):
  tipo=lista_tipo_token[i]

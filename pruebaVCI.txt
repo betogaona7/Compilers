@@ -1,0 +1,32 @@
+BEGIN
+	num a, b, c, y, z, j ,i, m(8,4), w, x
+	alfa  ww, wx
+	sub suma
+		a = 3 + c
+	endsub
+        sub resta
+                a = 3 -c
+        endsub
+MAIN
+	if a gt b
+           	gosub suma
+	else
+        	gosub resta
+	        for i = a + b; z / 2; 3
+	        {
+		    w = i * i
+                    exit
+		    show i, "Su cuadrado es" , w
+		    for j = 1; 10; 1
+		    {
+			exit
+                        w = j * i
+			show j, w
+		    }
+                    get m(i,j), x
+                    exit
+	        }
+                show 'Listo'
+	endif
+        show 'OK'
+END
