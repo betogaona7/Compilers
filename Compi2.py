@@ -692,11 +692,8 @@ for token in tokens:
 
 			if(arrayStr[len(arrayStr) - 1] != "FINLINEA"):
 				palabra = ""
-				#########################################################################################
-				"""for j in xrange(6, len(arrayStr)):
-					palabra = palabra + arrayStr[j]"""
 				palabra = palabra + str(arrayStr[3])
-				#########################################################################################
+
 				if(auxStr == None):
 					auxStr = palabra
 				else:
@@ -705,32 +702,33 @@ for token in tokens:
 				IntermediateCode(auxStr)
 				auxStr = None
 
-#Print tokens
-"""
+##############################################################################################################################
+######################################################## TOKENS ##############################################################
+print "Tokens structure = [Type, Line, Direction, Lexema]\n"
 cont = 1
 for token in tokens:
 	if (token[3] != ' ' and token[3] != '\n' and token[3] != '\r' and token[3] != '\t' and token[3] != "FINLINEA"):
 		print cont, token
 		cont += 1
 print '\n'
-"""
-#Print variables
-"""
+
+##############################################################################################################################
+###################################################### VARIABLES #############################################################
+print "Variables structure = [Type, Variable, Dimensions, Left, Right, Declared, VCI]\n"
 cont = 1
 for variable in variables_table:
 	print cont, variable 
 	cont += 1
 print '\n'
-"""
-#Print vci
 
+##############################################################################################################################
+######################################################### VCI ################################################################
+print "VCI\n"
 cont = 0
 for VCI in vciToken:
 	print cont, VCI
 	cont += 1
 print '\n'
-
-
 
 fichero.close()
 
