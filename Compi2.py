@@ -158,7 +158,8 @@ def IntermediateCode(s):
 		endsub = len(vciToken)
 		for i in xrange(0, len(variables_table)):
 			if (arrayS[1] in variables_table[i]):
-				variables_table[i] = str(variables_table[i]) + str(endsub)
+				#variables_table[i] = str(variables_table[i]) + str(endsub)
+				variables_table[i][6] = endsub
 				break
 
 	elif(arrayS[0] == "ENDSUB"):
@@ -171,9 +172,9 @@ def IntermediateCode(s):
 	elif(arrayS[0] == "GOSUB"):
 		for strr in variables_table:
 			if(arrayS[1] in strr):
-				auxStrSub = []
-				auxStrSub = strr.split(' ')
-				vciToken.append(">> " + auxStrSub[len(auxStrSub) - 1] + " <<")
+				auxStrSub = strr
+				#auxStrSub = strr.split(' ')
+				vciToken.append(">> " + str(auxStrSub[len(auxStrSub) - 1]) + " <<")
 				vciToken.append("GOSUB")
 
 	elif(arrayS[0] == "END"):
@@ -216,16 +217,18 @@ def IntermediateCode(s):
 				pilaPop2 = ""
 			else:
 				vciToken.append(pilaPop2)
-#######################################################IF ###################################
+
 	elif(haveCFS == True):
+##############################################################################################################################
+########################################################## IF ################################################################
 		if(arrayS[0] == "IF"):
 			#logic and arithmetic expressions
 			for f in xrange(1, len(arrayS)):
 				strAux = arrayS[f]
 				if(("(" in strAux) or ("-u" in strAux) or ("*" in strAux) or ("/" in strAux) or ("+" in strAux) or ("-" in strAux) or ("LT" in strAux) or ("LE" in strAux) or ("GT" in strAux) or ("EQ" in strAux) or ("NOT" in strAux) or ("AND" in strAux) or ("OR" in strAux) or ("=" in strAux) or (")" in strAux)):
 					for i in xrange(0, 14):
-						if(prioridades[i,0] in strAux):
-							p = prioridades[i,1]
+						if(prioridades[i][0] in strAux):
+							p = prioridades[i][1]
 							break
 
 					if(int(pilaAux.length()) == 0):
@@ -262,7 +265,7 @@ def IntermediateCode(s):
 		elif(arrayS[0] == "ELSE"):
 			a = int(pilaIf.Pop())
 			b = len(vciToken) + 2
-			vciToken[a-1] = ">>" + b + "<<"
+			vciToken[a-1] = ">>" + str(b) + "<<"
 			vciToken.append(" ")
 			pilaIf.Push(len(vciToken))
 			vciToken.append("GOTO")
@@ -270,9 +273,9 @@ def IntermediateCode(s):
 		elif(arrayS[0] == "ENDIF"):
 			a = int(pilaIf.Pop())
 			b = len(vciToken)
-			vciToken[a-1] = ">>" + b + "<<"
-####################################################################################
-################ FOR ###############################################################
+			vciToken[a-1] = ">>" + str(b) + "<<"
+##############################################################################################################################
+######################################################### FOR ################################################################
 		elif(arrayS[0] == "EXIT"):
 			vciToken.append("?")
 			pilaBreak.Push(len(vciToken))
@@ -310,8 +313,8 @@ def IntermediateCode(s):
 
 					if(("(" in strAux) or ("-u" in strAux) or ("*" in strAux) or ("/" in strAux) or ("+" in strAux) or ("-" in strAux) or ("LT" in strAux) or ("LE" in strAux) or ("GT" in strAux) or ("EQ" in strAux) or ("NOT" in strAux) or ("AND" in strAux) or ("OR" in strAux) or ("=" in strAux) or (")" in strAux)):
 						for i in xrange(0, 14):
-							if(prioridades[i,0] in strAux):
-								p = prioridades[i,1]
+							if(prioridades[i][0] in strAux):
+								p = prioridades[i][1]
 								break
 
 						if((int(pilaAux.length())) == 0):
@@ -347,25 +350,27 @@ def IntermediateCode(s):
 			vciToken.append(numeroFor.Pop())
 			vciToken.append("+")
 			vciToken.append("=")
-			vciToken.append(">>" + beginFor.Pop() + "<<")
+			vciToken.append(">>" + str(beginFor.Pop()) + "<<")
 			vciToken.append("GOTO")
-			vciToken[int(pilaBreak.Pop()) - 1] = ">>" + len(vciToken) + "<<"
- 			vciToken[int(pilaFor.Pop()) - 1] = ">>" + len(vciToken) + "<<"
+			vciToken[int(pilaBreak.Pop()) - 1] = ">>" + str(len(vciToken)) + "<<"
+ 			vciToken[int(pilaFor.Pop()) - 1] = ">>" + str(len(vciToken)) + "<<"
 			auxForBreak = auxForBreak - 1 
 
 			if(auxForBreak == 0):
-				vciToken[int(pilaBreak.Pop()) - 1] = ">>" + len(vciToken) + "<<"
-#############################################################################################
-########################################### SHOW AND GET ####################################
+				vciToken[int(pilaBreak.Pop()) - 1] = ">>" + str(len(vciToken)) + "<<"
+##############################################################################################################################
+#################################################### SHOW AND GET ############################################################
 
 		elif(arrayS[0] == "SHOW"):
+			############################################## AQUI
 			for i in xrange(1, len(arrayS)):
-				if(("," not in arrayS[i]) and ("'" not in arrayS[i])):
+				if(("," in arrayS[i]) == False and ("'" in arrayS[i]) == False):
 					if("SUCUADRADOES" in arrayS[i]):
-						vciToken.append("SU CUADRADO ES")
+						cadenax = "SU CUADRADO ES"
+						vciToken.append(cadenax)
 					else:
 						vciToken.append(arrayS[i])
-
+			############################################# AQUI
 					vciToken.append("SHOW")
 			vciToken.append("<SaltoDeLinea>")
 
@@ -471,8 +476,7 @@ def analysis(character):
 		elif ((constant[0] == string) and (constant == string)): # Reconocemos si es cadena 
 			typee = 16
 
-		token = [typee, line, 0, constant.replace('"','')]
-		"""token = typee + " " + line + " " + "0" + " " + constant"""
+		token = [typee, line, 0, constant.replace('"','').replace(' ','')]
 		tokens.append(token)
 		r = 1
 		constant = ""
@@ -490,8 +494,7 @@ def analysis(character):
 						flag = False
 						break
 					cont += 1
-				token = [typee, line, 0, character]
-				"""token = typee + " " + line + " " + "0" + " " + constant"""
+				token = [typee, line, 0, character.replace(' ','')]
 				tokens.append(token)
 #--------------------------------------------------------------------------------------------------------------------------
 	if (r == 1000 or (r == 1 and variable != "")):
@@ -517,8 +520,7 @@ def analysis(character):
 					type_var = 0
 					declared = False
 
-				token = [typee, line, 0, variable]
-				"""token = typee + " " + line + " " +  "0" + " " + variable"""
+				token = [typee, line, 0, variable.replace(' ','')]
 				tokens.append(token)
 
 			elif ((is_reserved_word == False) and ((variable == "") == False)):
@@ -530,12 +532,10 @@ def analysis(character):
 					left = 0
 					right = 0
 
-					for var in variables_table:
-######################################################PENDIENTE						
+					for var in variables_table:					
 						if(var[1] == variable):
 							flag = True
-							token = [var[0], line, direction, variable] #CHANGE	
-							"""token = var[0] + " " + line + " " + direction + " " + variable"""
+							token = [var[0], line, direction, variable.replace(' ','')] 
 							tokens.append(token)
 
 							dim_array = int(var[2])
@@ -543,14 +543,13 @@ def analysis(character):
 							right = int(var[4])
 							break
 						direction += 1
-#######################################################PENDIENTE
 
 					if(flag == False):
 						dimensions = 0
 						left = 0
 						right = 0
 
-						token = [type_var, line, direction, variable]
+						token = [type_var, line, direction, variable.replace(' ','')]
 						tokens.append(token)
 
 						if (character == ','):
@@ -609,7 +608,7 @@ def analysis(character):
 							break
 						cont += 1
 
-					token = [typee, line, 0, variable]
+					token = [typee, line, 0, variable.replace(' ','')]
 					tokens.append(token)
 					variable = ""
 #--------------------------------------------------------
@@ -623,7 +622,7 @@ def analysis(character):
 						flag = False
 						break
 					cont += 1
-				token = [typee, line, 0, character]
+				token = [typee, line, 0, character.replace(' ','')]
 				tokens.append(token)
 
 			if (character != ',' and character != ' ' and character != '(' and character != ')'):
@@ -688,23 +687,23 @@ for token in tokens:
 		vciToken.append("?")
 		vciToken.append("GOTOF")
 	if(start == True):
-		
-		arrayStr = token
+		if (token[3] != ' ' and token[3] != '\n' and token[3] != '\r' and token[3] != '\t'):
+			arrayStr = token
 
-		if(arrayStr[len(arrayStr) - 1] != "FINLINEA"):
-			palabra = ""
-			#########################################################################################
-			"""for j in xrange(6, len(arrayStr)):
-				palabra = palabra + arrayStr[j]"""
-			palabra = palabra + str(arrayStr[3])
-			#########################################################################################
-			if(auxStr == None):
-				auxStr = palabra
+			if(arrayStr[len(arrayStr) - 1] != "FINLINEA"):
+				palabra = ""
+				#########################################################################################
+				"""for j in xrange(6, len(arrayStr)):
+					palabra = palabra + arrayStr[j]"""
+				palabra = palabra + str(arrayStr[3])
+				#########################################################################################
+				if(auxStr == None):
+					auxStr = palabra
+				else:
+					auxStr = auxStr + " " + palabra
 			else:
-				auxStr = auxStr + " " + palabra
-		else:
-			IntermediateCode(auxStr)
-			auxStr = None
+				IntermediateCode(auxStr)
+				auxStr = None
 
 #Print tokens
 """
@@ -724,11 +723,13 @@ for variable in variables_table:
 print '\n'
 """
 #Print vci
-cont = 1
+
+cont = 0
 for VCI in vciToken:
 	print cont, VCI
 	cont += 1
 print '\n'
+
 
 
 fichero.close()
