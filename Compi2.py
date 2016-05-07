@@ -158,7 +158,6 @@ def IntermediateCode(s):
 		endsub = len(vciToken)
 		for i in xrange(0, len(variables_table)):
 			if (arrayS[1] in variables_table[i]):
-				#variables_table[i] = str(variables_table[i]) + str(endsub)
 				variables_table[i][6] = endsub
 				break
 
@@ -173,7 +172,6 @@ def IntermediateCode(s):
 		for strr in variables_table:
 			if(arrayS[1] in strr):
 				auxStrSub = strr
-				#auxStrSub = strr.split(' ')
 				vciToken.append(">> " + str(auxStrSub[len(auxStrSub) - 1]) + " <<")
 				vciToken.append("GOSUB")
 
@@ -362,7 +360,6 @@ def IntermediateCode(s):
 #################################################### SHOW AND GET ############################################################
 
 		elif(arrayS[0] == "SHOW"):
-			############################################## AQUI
 			for i in xrange(1, len(arrayS)):
 				if(("," in arrayS[i]) == False and ("'" in arrayS[i]) == False):
 					if("SUCUADRADOES" in arrayS[i]):
@@ -370,7 +367,6 @@ def IntermediateCode(s):
 						vciToken.append(cadenax)
 					else:
 						vciToken.append(arrayS[i])
-			############################################# AQUI
 					vciToken.append("SHOW")
 			vciToken.append("<SaltoDeLinea>")
 
@@ -685,7 +681,7 @@ for token in tokens:
 	#if("BEGIN" in token):
 	if(token[3] == "BEGIN"):
 		vciToken.append("?")
-		vciToken.append("GOTOF")
+		vciToken.append("GOTO")
 	if(start == True):
 		if (token[3] != ' ' and token[3] != '\n' and token[3] != '\r' and token[3] != '\t'):
 			arrayStr = token
@@ -704,6 +700,7 @@ for token in tokens:
 
 ##############################################################################################################################
 ######################################################## TOKENS ##############################################################
+"""
 print "Tokens structure = [Type, Line, Direction, Lexema]\n"
 cont = 1
 for token in tokens:
@@ -711,9 +708,10 @@ for token in tokens:
 		print cont, token
 		cont += 1
 print '\n'
-
+"""
 ##############################################################################################################################
 ###################################################### VARIABLES #############################################################
+
 print "Variables structure = [Type, Variable, Dimensions, Left, Right, Declared, VCI]\n"
 cont = 1
 for variable in variables_table:
